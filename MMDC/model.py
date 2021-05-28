@@ -24,8 +24,6 @@ def Inception(inputs):
     branch2 = Activation("relu")(branch2)
 
 
-
-#
     branch3 = Conv2D(32, 1, padding="same")(inputs)
     branch3 = BatchNormalization()(branch3)
     branch3 = Activation("relu")(branch3)
@@ -124,10 +122,5 @@ def create_model():
     return tf.keras.Model(inputs=inputs, outputs=prediction)
 
 model = create_model()
-
-
-# print(model.summary())
-# tf.keras.utils.plot_model(model)  #绘制模型流程图
-
 
 
