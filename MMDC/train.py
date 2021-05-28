@@ -2,14 +2,14 @@
 import tensorflow as tf
 import numpy as np
 import glob
-from Unet import model
+from model import model
 
 
 
 def data_process():
 
     image = glob.glob("F:/data_segmentation/image/*")
-    # 排序
+
     image.sort(key=lambda x: x.split("/")[-1])
     label = glob.glob("F:/data_segmentation/label/*")
 
