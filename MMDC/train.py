@@ -8,33 +8,39 @@ from model import model
 
 def data_process():
 
-    image = glob.glob("F:/data_segmentation/image/*")
 
-    image.sort(key=lambda x: x.split("/")[-1])
-    label = glob.glob("F:/data_segmentation/label/*")
+    # train data
+    train_image = glob.glob("F:/DT/train/image/*")
+    train_image.sort(key=lambda x: x.split("/")[-1])
 
-    label.sort(key=lambda x: x.split("/")[-1])
+    train_lebel = glob.glob("F:/DT/train/label/*")
+    train_lebel.sort(key=lambda x: x.split("/")[-1])
+
 
 
     np.random.seed(2020)
-    index = np.random.permutation(len(image))
-
-    image = np.array(image)[index]
-    label = np.array(label)[index]
+    index = np.random.permutation(len(train_image))
 
 
-    dataset = tf.data.Dataset.from_tensor_slices((image,label))
+    train_image = np.array(train_image)[index]
+    train_lebel = np.array(train_lebel)[index]
+
+    train_count = len(train_image)
+
+    # test data
+    test_image = glob.glob("F:/DT/test/image/*")
+    test_label = glob.glob("F:/DT/test/label/*")
+
+    test_count = len(test_image)
 
 
-    test_count= int(len(image)*0.2)
-    train_count= len(image)-test_count
-
-    train_ds = dataset.skip(test_count)
-    test_ds = dataset.take(test_count)
+    train_dataset = tf.data.Dataset.from_tensor_slices((train_image,train_lebel))
+    test_dataset = tf.data.Dataset.from_tensor_slices((test_image,test_label))
 
 
-    train_ds = train_ds.map(load_img,num_parallel_calls=tf.data.experimental.AUTOTUNE)
-    test_ds = test_ds.map(load_img)
+
+    train_ds = train_dataset.map(load_img,num_parallel_calls=tf.data.experimental.AUTOTUNE)
+    test_ds = test_dataset.map(load_img,num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
     batch_size = 8
 
@@ -80,7 +86,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001,beta_1=0.99
 
 train_dataset,test_dataset,STEPS_PER_EPOCH,VALIDATION_STEPS =data_process()
 
-epoch =120
+epoch = 70
 
 
 
